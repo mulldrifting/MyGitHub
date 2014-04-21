@@ -1,5 +1,5 @@
 //
-//  LLViewController.h
+//  LLSearchDetailViewController.h
 //  MyGitHub
 //
 //  Created by Lauren Lee on 4/21/14.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LLViewController : UIViewController
+@interface LLSearchDetailViewController : UIViewController
 
 @end
