@@ -1,24 +1,21 @@
 //
-//  LLSearchDetailViewController.m
+//  LLRepoDetailViewController.m
 //  MyGitHub
 //
-//  Created by Lauren Lee on 4/21/14.
+//  Created by Lauren Lee on 4/22/14.
 //  Copyright (c) 2014 Lauren Lee. All rights reserved.
 //
 
-#import "LLSearchDetailViewController.h"
+#import "LLRepoDetailViewController.h"
 
-@interface LLSearchDetailViewController ()
+@interface LLRepoDetailViewController ()
 
-@property (nonatomic, weak) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
 
-- (void)configureView;
 
 @end
 
-@implementation LLSearchDetailViewController
-
-#pragma mark - Managing the detail item
+@implementation LLRepoDetailViewController
 
 - (void)setDetailItem:(id)newDetailItem
 {
@@ -36,23 +33,6 @@
     // Update the user interface for the detail item.
     
     if (self.detailItem) {
-        
-//        NSData *webViewData;
-//        
-//        if ([self.detailItem valueForKey:@"html_cache"]) {
-//            
-//            
-//            webViewData = [self.detailItem valueForKey:@"html_cache"];
-//        } else {
-//            webViewData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[self.detailItem valueForKey:@"html_url"]]];
-//        }
-//        
-//        [self.detailItem setValue:webViewData forKey:@"html_cache"];
-        
-//        [_webView loadData:[self.detailItem valueForKey:@"html_cache"]
-//                  MIMEType:nil
-//          textEncodingName:nil
-//                   baseURL:nil];
         
         NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:[self.detailItem valueForKey:@"html_url"]] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:64800];
         [self.webView loadRequest:urlRequest];

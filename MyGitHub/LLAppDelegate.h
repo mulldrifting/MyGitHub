@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LLNetworkController.h"
 
 @interface LLAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property (strong, nonatomic) LLNetworkController *networkController;
 
 @end

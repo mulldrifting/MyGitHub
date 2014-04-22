@@ -13,7 +13,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    
+    self.networkController = [LLNetworkController new];
+    
     /*
      UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
@@ -23,6 +25,13 @@
     LLSearchViewController *controller = (LLSearchViewController *)masterNavigationController.topViewController;
     controller.managedObjectContext = self.managedObjectContext;
      */
+    return YES;
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    [self.networkController handleOAuthCallbackWithURL:url];
+    
     return YES;
 }
 							

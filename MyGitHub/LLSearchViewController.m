@@ -13,7 +13,7 @@
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
-@property (strong, nonatomic) NSMutableArray *arrayOfRepos;
+@property (strong, nonatomic) NSMutableArray *repoArray;
 
 @end
 
@@ -26,7 +26,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    self.arrayOfRepos = [NSMutableArray new];
+    self.repoArray = [NSMutableArray new];
     
     [[UISearchBar appearance] setTintColor:[UIColor blackColor]];
     
@@ -36,6 +36,8 @@
                                           action:@selector(dismissKeyboard)];
     tapOutside.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapOutside];
+    
+        
 }
 
 - (IBAction)menuButtonPressed:(id)sender {
@@ -45,6 +47,8 @@
 
 - (void)reposForSearchString:(NSString *)searchString
 {
+    searchString = [searchString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSURL *jsonURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.github.com/search/repositories?q=%@", searchString]];
     
     NSData *jsonData = [NSData dataWithContentsOfURL:jsonURL];
@@ -55,7 +59,7 @@
     
     for (NSDictionary *repo in jsonDict[@"items"]) {
         LLRepo *newRepo = [[LLRepo alloc] initWithName:repo[@"name"] withURL:repo[@"html_url"]];
-        [self.arrayOfRepos addObject:newRepo];
+        [self.repoArray addObject:newRepo];
     }
     
     [self.tableView reloadData];
@@ -63,13 +67,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-        return [self.arrayOfRepos count];
+        return [self.repoArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell" forIndexPath:indexPath];
-    cell.textLabel.text = [self.arrayOfRepos[indexPath.row] name];
+    cell.textLabel.text = [self.repoArray[indexPath.row] name];
     return cell;
 }
 
@@ -100,7 +104,7 @@
     {
         LLSearchDetailViewController *destination = segue.destinationViewController;
         
-        destination.detailItem = [self.arrayOfRepos objectAtIndex:[[_tableView indexPathForSelectedRow] row]];
+        destination.detailItem = [self.repoArray objectAtIndex:[[_tableView indexPathForSelectedRow] row]];
     }
 }
 

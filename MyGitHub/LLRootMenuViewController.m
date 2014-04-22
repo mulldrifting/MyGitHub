@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Lauren Lee. All rights reserved.
 //
 
+#import "LLAppDelegate.h"
 #import "LLRootMenuViewController.h"
 #import "LLReposViewController.h"
 #import "LLWatchedViewController.h"
@@ -45,6 +46,7 @@
     
     [self setupViewControllers];
     [self setupDragRecognizer];
+    
 }
 
 - (void)setupViewControllers
@@ -52,6 +54,8 @@
     LLReposViewController *repoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"repos"];
     repoViewController.title = @"my repos";
     repoViewController.menuDelegate = self;
+    UINavigationController *repoNav = [[UINavigationController alloc] initWithRootViewController:repoViewController];
+    repoNav.navigationBarHidden = YES;
     
     LLWatchedViewController *watchedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"watched"];
     watchedViewController.title = @"my watched";
@@ -69,7 +73,7 @@
     [self addChildViewController:self.topViewController];
     [self.view addSubview:self.topViewController.view];
     [self.topViewController didMoveToParentViewController:self];
-
+    
 }
 
 -(void)setupDragRecognizer
@@ -206,8 +210,8 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    cell.textLabel.textColor = [UIColor colorWithRed:0.966 green:1.000 blue:0.839 alpha:1.000];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
+    cell.textLabel.textColor = [UIColor colorWithRed:0.889 green:0.882 blue:0.708 alpha:1.000];
     cell.textLabel.text = [self.arrayOfViewControllers[indexPath.row] title];
     return cell;
 }
