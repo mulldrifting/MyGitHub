@@ -38,6 +38,11 @@
     
     self.tapToClose = [UITapGestureRecognizer new];
     
+    UIEdgeInsets inset = UIEdgeInsetsMake(30, 0, 0, 0);
+    self.tableView.contentInset = inset;
+    
+//    [self setNeedsStatusBarAppearanceUpdate];
+    
     [self setupViewControllers];
     [self setupDragRecognizer];
 }
@@ -45,18 +50,20 @@
 - (void)setupViewControllers
 {
     LLReposViewController *repoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"repos"];
-    repoViewController.title = @"My Repos";
+    repoViewController.title = @"my repos";
     repoViewController.menuDelegate = self;
     
     LLWatchedViewController *watchedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"watched"];
-    watchedViewController.title = @"My Watched";
+    watchedViewController.title = @"my watched";
     watchedViewController.menuDelegate = self;
     
     LLSearchViewController *searchViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"search"];
-    searchViewController.title = @"Search";
+    searchViewController.title = @"search";
     searchViewController.menuDelegate = self;
+    UINavigationController *searchNav = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+    searchNav.navigationBarHidden = YES;
     
-    self.arrayOfViewControllers = [NSMutableArray arrayWithObjects:repoViewController, watchedViewController, searchViewController, nil];
+    self.arrayOfViewControllers = [NSMutableArray arrayWithObjects:repoViewController, watchedViewController, searchNav, nil];
     
     self.topViewController = self.arrayOfViewControllers[0];
     [self addChildViewController:self.topViewController];
@@ -200,6 +207,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    cell.textLabel.textColor = [UIColor colorWithRed:0.966 green:1.000 blue:0.839 alpha:1.000];
     cell.textLabel.text = [self.arrayOfViewControllers[indexPath.row] title];
     return cell;
 }

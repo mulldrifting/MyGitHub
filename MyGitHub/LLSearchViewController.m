@@ -7,36 +7,39 @@
 //
 
 #import "LLSearchViewController.h"
+#import "LLRepo.h"
 
-@interface LLSearchViewController () <UISearchBarDelegate>
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+@interface LLSearchViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
+
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+
+@property (strong, nonatomic) NSMutableArray *arrayOfRepos;
+
 @end
 
 @implementation LLSearchViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.detailViewController = (LLSearchDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
+    self.arrayOfRepos = [NSMutableArray new];
+    
+    [[UISearchBar appearance] setTintColor:[UIColor blackColor]];
+    
+    // Make keyboard disappear upon tapping outside text field
+    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(dismissKeyboard)];
+    tapOutside.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tapOutside];
 }
 
 - (IBAction)menuButtonPressed:(id)sender {
+    [self.searchBar resignFirstResponder];
     [self.menuDelegate handleMenuButtonPressed];
 }
 
@@ -51,38 +54,55 @@
                                                     error:nil];
     
     for (NSDictionary *repo in jsonDict[@"items"]) {
-        [self insertNewRepoWithName:repo[@"name"] andURL:repo[@"html_url"]];
+        LLRepo *newRepo = [[LLRepo alloc] initWithName:repo[@"name"] withURL:repo[@"html_url"]];
+        [self.arrayOfRepos addObject:newRepo];
     }
+    
+    [self.tableView reloadData];
 }
 
-- (void)insertNewRepoWithName:(NSString *)name andURL:(NSString *)html_url
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-    Repo *newRepo = [NSEntityDescription insertNewObjectForEntityForName:@"Repo" inManagedObjectContext:context];
-    
-    newRepo.name = name;
-    newRepo.html_url = html_url;
-    
-    // Save the context.
-    NSError *error = nil;
-    if (![context save:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
+        return [self.arrayOfRepos count];
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell" forIndexPath:indexPath];
+    cell.textLabel.text = [self.arrayOfRepos[indexPath.row] name];
+    return cell;
+}
 
-/*
+#pragma mark - Search Bar Methods
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self reposForSearchString:searchBar.text];
+    [self dismissKeyboard];
+}
+
+-(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    [self dismissKeyboard];
+}
+
+-(void)dismissKeyboard
+{
+    [self.view endEditing:YES];
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"showDetailViewSegue"])
+    {
+        LLSearchDetailViewController *destination = segue.destinationViewController;
+        
+        destination.detailItem = [self.arrayOfRepos objectAtIndex:[[_tableView indexPathForSelectedRow] row]];
+    }
 }
-*/
+
 
 @end

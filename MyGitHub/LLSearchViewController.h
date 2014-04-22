@@ -7,18 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
 #import "LLMenuProtocol.h"
+#import "LLSearchDetailViewController.h"
 
-@class LLSearchDetailViewController;
+@interface LLSearchViewController : UIViewController
 
-@interface LLSearchViewController : UITableViewController <NSFetchedResultsControllerDelegate>
-
-@property (strong, nonatomic) LLSearchDetailViewController *detailViewController;
-
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, unsafe_unretained) id<LLMenuProtocol> menuDelegate;
+@property (strong, nonatomic) LLSearchDetailViewController *detailViewController;
 
 @end

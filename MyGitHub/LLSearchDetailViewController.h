@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LLSearchDetailViewController : UIViewController
+@interface LLSearchDetailViewController : UIViewController 
+
+@property (strong, nonatomic) id detailItem;
 
 @end

@@ -7,12 +7,22 @@
 //
 
 #import "LLAppDelegate.h"
+#import "LLSearchViewController.h"
 
 @implementation LLAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    /*
+     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
+    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
+    splitViewController.delegate = (id)navigationController.topViewController;
+    
+    UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
+    LLSearchViewController *controller = (LLSearchViewController *)masterNavigationController.topViewController;
+    controller.managedObjectContext = self.managedObjectContext;
+     */
     return YES;
 }
 							
@@ -42,5 +52,6 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
 
 @end

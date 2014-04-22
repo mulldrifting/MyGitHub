@@ -25,6 +25,7 @@
 		FEFC57E31905B12700F354BB /* LLWatchedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57E21905B12700F354BB /* LLWatchedViewController.m */; };
 		FEFC57E61905B13100F354BB /* LLSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57E51905B13100F354BB /* LLSearchViewController.m */; };
 		FEFC57EB1905C74E00F354BB /* LLSearchDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57EA1905C74E00F354BB /* LLSearchDetailViewController.m */; };
+		FEFC57EF1905CB0C00F354BB /* LLRepo.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57EE1905CB0C00F354BB /* LLRepo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,8 @@
 		FEFC57E81905B44200F354BB /* LLMenuProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLMenuProtocol.h; sourceTree = "<group>"; };
 		FEFC57E91905C74E00F354BB /* LLSearchDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSearchDetailViewController.h; sourceTree = "<group>"; };
 		FEFC57EA1905C74E00F354BB /* LLSearchDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSearchDetailViewController.m; sourceTree = "<group>"; };
+		FEFC57ED1905CB0C00F354BB /* LLRepo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLRepo.h; sourceTree = "<group>"; };
+		FEFC57EE1905CB0C00F354BB /* LLRepo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLRepo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,7 @@
 				FEFC57B91905AB7600F354BB /* LLAppDelegate.m */,
 				FEFC57BB1905AB7600F354BB /* Main.storyboard */,
 				FEFC57E71905B13F00F354BB /* View Controllers */,
+				FEFC57EC1905CAFA00F354BB /* Model */,
 				FEFC57C11905AB7600F354BB /* Images.xcassets */,
 				FEFC57B01905AB7600F354BB /* Supporting Files */,
 			);
@@ -180,6 +184,15 @@
 				FEFC57EA1905C74E00F354BB /* LLSearchDetailViewController.m */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		FEFC57EC1905CAFA00F354BB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FEFC57ED1905CB0C00F354BB /* LLRepo.h */,
+				FEFC57EE1905CB0C00F354BB /* LLRepo.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEFC57E61905B13100F354BB /* LLSearchViewController.m in Sources */,
+				FEFC57EF1905CB0C00F354BB /* LLRepo.m in Sources */,
 				FEFC57BA1905AB7600F354BB /* LLAppDelegate.m in Sources */,
 				FEFC57E31905B12700F354BB /* LLWatchedViewController.m in Sources */,
 				FEFC57B61905AB7600F354BB /* main.m in Sources */,
@@ -491,6 +505,7 @@
 				FEFC57DA1905AB7600F354BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FEFC57DB1905AB7600F354BB /* Build configuration list for PBXNativeTarget "MyGitHubTests" */ = {
 			isa = XCConfigurationList;
@@ -499,6 +514,7 @@
 				FEFC57DD1905AB7600F354BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

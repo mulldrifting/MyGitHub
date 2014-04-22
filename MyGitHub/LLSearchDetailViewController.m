@@ -10,23 +10,73 @@
 
 @interface LLSearchDetailViewController ()
 
+@property (nonatomic, weak) IBOutlet UIWebView *webView;
+
+- (void)configureView;
+
 @end
 
 @implementation LLSearchDetailViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+#pragma mark - Managing the detail item
+
+- (void)setDetailItem:(id)newDetailItem
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+    if (_detailItem != newDetailItem) {
+        _detailItem = newDetailItem;
+        
+        // Update the view.
+        [self configureView];
     }
-    return self;
+    
+}
+
+- (void)configureView
+{
+    // Update the user interface for the detail item.
+    
+    if (self.detailItem) {
+        
+        NSData *webViewData;
+        
+        if ([self.detailItem valueForKey:@"html_cache"]) {
+            webViewData = [self.detailItem valueForKey:@"html_cache"];
+        } else {
+            webViewData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[self.detailItem valueForKey:@"html_url"]]];
+        }
+        
+        [self.detailItem setValue:webViewData forKey:@"html_cache"];
+        
+        [_webView loadData:[self.detailItem valueForKey:@"html_cache"]
+                  MIMEType:nil
+          textEncodingName:nil
+                   baseURL:nil];
+        
+//        self.navigationItem.title = [[self.detailItem valueForKey:@"name"] description];
+        
+    }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+	// Do any additional setup after loading the view, typically from a nib.
+    [self configureView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
 - (void)didReceiveMemoryWarning
