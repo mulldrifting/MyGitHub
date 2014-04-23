@@ -13,18 +13,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+ 
+    NSOperationQueue *queue = [NSOperationQueue new];
+    [queue addOperationWithBlock:^{
+        self.networkController = [[LLNetworkController alloc] initWithToken];
+    }];
     
-    self.networkController = [LLNetworkController new];
-    
-    /*
-     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-    splitViewController.delegate = (id)navigationController.topViewController;
-    
-    UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
-    LLSearchViewController *controller = (LLSearchViewController *)masterNavigationController.topViewController;
-    controller.managedObjectContext = self.managedObjectContext;
-     */
     return YES;
 }
 

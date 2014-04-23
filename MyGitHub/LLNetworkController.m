@@ -7,51 +7,65 @@
 //
 
 #import "LLNetworkController.h"
+#import "NSString+URLParse.h"
 #import "LLConstants.h"
+#import "LLRepo.h"
+
+@interface LLNetworkController()
+
+@property (copy, nonatomic) void (^loginCompletionBlock)(void);
+
+@end
 
 @implementation LLNetworkController
 
--(id)init
+-(id)initWithToken
 {
     if (self = [super init])
     {
-        NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"];
+        _session = [NSURLSession sharedSession];
         
-        if (!token) {
-//            NSOperationQueue *queue = [NSOperationQueue new];
-//            [queue addOperationWithBlock:^{
-//                [self requestOAuthAccess];
-//            }];
-            [self performSelector:@selector(requestOAuthAccess) withObject:nil afterDelay:0.01];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"]) {
+            
+            _tokenAuthenticated = YES;
+            _session.configuration.HTTPAdditionalHeaders = @{@"Authorization":[NSString stringWithFormat:@"token %@", [[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"]]};
+            
+        }
+        
+        else {
+            _tokenAuthenticated = NO;
         }
     }
     
     return self;
 }
 
--(void)requestOAuthAccess
+-(void)requestOAuthAccessWithCompletion:(void(^)(void))completionBlock
 {
+    _loginCompletionBlock = completionBlock;
+    
     NSString *urlString = [NSString stringWithFormat:GITHUB_OAUTH_URL, GITHUB_CLIENT_ID, GITHUB_CALLBACK_URI, @"user,repo"];
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+    
 }
 
 -(void)handleOAuthCallbackWithURL:(NSURL *)url
 {
     NSString *code = [self getCodeFromCallbackURL:url];
+    
     NSString *postString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&code=%@", GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, code];
     NSData *postData = [postString dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     
-    NSURLSession *session = [NSURLSession sharedSession];
     NSMutableURLRequest *request = [NSMutableURLRequest new];
-    [request setURL:[NSURL URLWithString:@"https://github.com/login/oauth/access_token"]];
+    [request setURL:[NSURL URLWithString:GITHUB_ACCESS_TOKEN_URL]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
     
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *postDataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
 //        NSLog(@"response: %@",response);
         
@@ -60,37 +74,59 @@
         }
         else {
             NSString *token = [self convertResponseDataIntoToken:data];
-            [[[session configuration] HTTPAdditionalHeaders] setValue:token forKey:@"Authorization"];
+            
+            _session.configuration.HTTPAdditionalHeaders = @{@"Authorization":[NSString stringWithFormat:@"token %@",token]};
             
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setValue:token forKey:@"accessToken"];
             [defaults synchronize];
+            
+            _tokenAuthenticated = YES;
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                _loginCompletionBlock();
+            }];
         }
     }];
     
     [postDataTask resume];
 }
 
--(void)requestReposForAuthenticatedUser
+-(void)requestReposForAuthenticatedUser:(void(^)(NSMutableArray *repos))completionBlock
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *token = [defaults objectForKey:@"accessToken"];
-
     NSString *apiCallURLString = [GITHUB_API_URL stringByAppendingString:@"/user/repos"];
     
-    NSURLSession *session = [NSURLSession sharedSession];
     NSMutableURLRequest *request = [NSMutableURLRequest new];
     [request setURL:[NSURL URLWithString:apiCallURLString]];
-    [request setValue:[NSString stringWithFormat:@"token %@", token] forHTTPHeaderField:@"Authorization"];
     [request setHTTPMethod:@"GET"];
     
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
         
-        id repoArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-        [self.repoDelegate updateRepoArrayWithArray:repoArray];
-        
-        NSLog(@"%@", repoArray);
+        id jsonArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+
+        if ([jsonArray isKindOfClass:[NSMutableArray class]]) {
+            NSLog(@"%@", jsonArray);
+            
+            NSMutableArray *repos = [NSMutableArray new];
+            
+//            for (NSDictionary *dict in repos) {
+//                LLRepo *newRepo = [[LLRepo alloc] initWithName:dict[@"name"] withURL:dict[@"html_url"]];
+//                [repoArray addObject:newRepo];
+//            }
+
+            
+            [jsonArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+                LLRepo *newRepo = [[LLRepo alloc] initWithName:obj[@"name"] withURL:obj[@"html_url"]];
+                [repos addObject:newRepo];
+                
+            }];
+            
+            
+            
+            completionBlock(repos);
+        }
         
     }];
     
@@ -101,9 +137,9 @@
 {
     NSString *query = [callbackURL query]; // gets everything past the ? in the URL
     
-    NSArray *components = [query componentsSeparatedByString:@"code="];
+    NSDictionary *componentDictionary = [query breakQueryIntoComponents];
     
-    return [components lastObject];
+    return [componentDictionary objectForKey:@"code"];
     
 }
 
@@ -111,14 +147,9 @@
 {
     NSString *tokenResponse = [[NSString alloc] initWithData:responseData encoding:NSASCIIStringEncoding];
     
-    NSArray *tokenComponents = [tokenResponse componentsSeparatedByString:@"&"];
+    NSDictionary *tokenComponents = [tokenResponse breakQueryIntoComponents];
     
-    NSString *accessTokenWithCode = [tokenComponents firstObject];
-    
-    NSArray *accessTokenArray = [accessTokenWithCode componentsSeparatedByString:@"="];
-    
-    return accessTokenArray[1];
-
+    return [tokenComponents objectForKey:@"access_token"];
 }
 
 @end

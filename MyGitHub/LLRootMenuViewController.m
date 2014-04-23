@@ -20,6 +20,7 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
+@property (weak, nonatomic) LLNetworkController *networkController;
 @property (strong, nonatomic) NSMutableArray *arrayOfViewControllers;
 @property (strong, nonatomic) UIViewController *topViewController;
 
@@ -30,17 +31,26 @@
 
 @implementation LLRootMenuViewController
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    if (!_networkController.tokenAuthenticated) {
+        [self performSegueWithIdentifier:@"showLoadingSegue" sender:self];
+    }
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _networkController = [(LLAppDelegate*)[[UIApplication sharedApplication] delegate] networkController];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    UIEdgeInsets inset = UIEdgeInsetsMake(40, 0, 0, 0);
+    self.tableView.contentInset = inset;
     
     self.tapToClose = [UITapGestureRecognizer new];
-    
-    UIEdgeInsets inset = UIEdgeInsetsMake(30, 0, 0, 0);
-    self.tableView.contentInset = inset;
     
 //    [self setNeedsStatusBarAppearanceUpdate];
     
@@ -52,22 +62,22 @@
 - (void)setupViewControllers
 {
     LLReposViewController *repoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"repos"];
-    repoViewController.title = @"my repos";
+    repoViewController.title = @"My Repos";
     repoViewController.menuDelegate = self;
     UINavigationController *repoNav = [[UINavigationController alloc] initWithRootViewController:repoViewController];
     repoNav.navigationBarHidden = YES;
     
     LLWatchedViewController *watchedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"watched"];
-    watchedViewController.title = @"my watched";
+    watchedViewController.title = @"My Watched";
     watchedViewController.menuDelegate = self;
     
     LLSearchViewController *searchViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"search"];
-    searchViewController.title = @"search";
+    searchViewController.title = @"Search";
     searchViewController.menuDelegate = self;
     UINavigationController *searchNav = [[UINavigationController alloc] initWithRootViewController:searchViewController];
     searchNav.navigationBarHidden = YES;
     
-    self.arrayOfViewControllers = [NSMutableArray arrayWithObjects:repoViewController, watchedViewController, searchNav, nil];
+    self.arrayOfViewControllers = [NSMutableArray arrayWithObjects:repoNav, watchedViewController, searchNav, nil];
     
     self.topViewController = self.arrayOfViewControllers[0];
     [self addChildViewController:self.topViewController];

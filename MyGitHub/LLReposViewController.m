@@ -10,7 +10,7 @@
 #import "LLAppDelegate.h"
 #import "LLRepo.h"
 
-@interface LLReposViewController () <UITableViewDataSource, UITableViewDelegate, LLNetworkControllerProtocol>
+@interface LLReposViewController () <UITableViewDataSource, UITableViewDelegate>
 
 //@property (weak, nonatomic) IBOutlet UIImageView *imageTest;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -21,6 +21,8 @@
 
 @implementation LLReposViewController
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -30,10 +32,34 @@
     
     self.repoArray = [NSMutableArray new];
     
-    LLNetworkController *networkController = [(LLAppDelegate*)[[UIApplication sharedApplication] delegate] networkController];
-    networkController.repoDelegate = self;
-    [networkController requestReposForAuthenticatedUser];
-    
+//    LLNetworkController *networkController = [(LLAppDelegate*)[[UIApplication sharedApplication] delegate] networkController];
+//    
+//    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"];
+//    
+//    if (!token) {
+//        [networkController requestOAuthAccess];
+//    }
+//    
+//    void (^nameOfBlock)(NSMutableArray *array) = ^void(NSMutableArray *array) {
+//        
+//    };
+//    
+//    [networkController requestReposForAuthenticatedUser:nameOfBlock];
+//    
+//    [networkController requestReposForAuthenticatedUser:^(NSMutableArray *repos) {
+//        
+////        for (NSDictionary *dict in repos) {
+////            LLRepo *newRepo = [[LLRepo alloc] initWithName:dict[@"name"] withURL:dict[@"html_url"]];
+////            [self.repoArray addObject:newRepo];
+////        }
+//        
+//        self.repoArray = repos;
+//        
+//        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//            [self.tableView reloadData];
+//        }];
+//        
+//    }];
 
     
 //    UIImage *myIconImage = [UIImage imageNamed:@"GutterButton"];
@@ -82,6 +108,11 @@
         LLRepo *newRepo = [[LLRepo alloc] initWithName:dict[@"name"] withURL:dict[@"html_url"]];
         [self.repoArray addObject:newRepo];
     }
+    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        
+//        [self.tableView reloadData];
+//    });
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [self.tableView reloadData];

@@ -8,20 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol LLNetworkControllerProtocol <NSObject>
-
-@optional
-
--(void)updateRepoArrayWithArray:(NSMutableArray*)array;
-
-@end
 
 @interface LLNetworkController : NSObject
 
-@property (unsafe_unretained, nonatomic) id<LLNetworkControllerProtocol> repoDelegate;
+@property (nonatomic) BOOL tokenAuthenticated;
+@property (weak, nonatomic) NSURLSession *session;
 
--(void)requestOAuthAccess;
+-(id)initWithToken;
+-(void)requestOAuthAccessWithCompletion:(void(^)(void))completionBlock;
 -(void)handleOAuthCallbackWithURL:(NSURL*)url;
--(void)requestReposForAuthenticatedUser;
+-(void)requestReposForAuthenticatedUser:(void(^)(NSMutableArray *repos))completionBlock;
 
 @end
