@@ -9,18 +9,19 @@
 #import "LLReposViewController.h"
 #import "LLAppDelegate.h"
 #import "LLRepo.h"
+#import "LLConstants.h"
 
-@interface LLReposViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface LLReposViewController () <UITableViewDataSource, UITableViewDelegate, LLNetworkControllerProtocol>
 
-//@property (weak, nonatomic) IBOutlet UIImageView *imageTest;
+@property (weak, nonatomic) IBOutlet UIButton *gutterButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (strong, nonatomic) NSMutableArray *repoArray;
+@property (weak, nonatomic) LLNetworkController *networkController;
+@property (strong, nonatomic) NSMutableArray *repos;
 
 @end
 
 @implementation LLReposViewController
-
 
 
 - (void)viewDidLoad
@@ -30,66 +31,27 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    self.repoArray = [NSMutableArray new];
+    self.repos = [NSMutableArray new];
     
-//    LLNetworkController *networkController = [(LLAppDelegate*)[[UIApplication sharedApplication] delegate] networkController];
-//    
-//    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"];
-//    
-//    if (!token) {
-//        [networkController requestOAuthAccess];
-//    }
-//    
-//    void (^nameOfBlock)(NSMutableArray *array) = ^void(NSMutableArray *array) {
-//        
-//    };
-//    
-//    [networkController requestReposForAuthenticatedUser:nameOfBlock];
-//    
-//    [networkController requestReposForAuthenticatedUser:^(NSMutableArray *repos) {
-//        
-////        for (NSDictionary *dict in repos) {
-////            LLRepo *newRepo = [[LLRepo alloc] initWithName:dict[@"name"] withURL:dict[@"html_url"]];
-////            [self.repoArray addObject:newRepo];
-////        }
-//        
-//        self.repoArray = repos;
-//        
-//        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-//            [self.tableView reloadData];
-//        }];
-//        
-//    }];
-
+    self.gutterButton.imageView.image = [LLConstants gutterButtonNormalImage];
+    [self.gutterButton setImage:[LLConstants gutterButtonHighlightedImage] forState:UIControlStateHighlighted];
     
-//    UIImage *myIconImage = [UIImage imageNamed:@"GutterButton"];
-//
-//    UIGraphicsBeginImageContextWithOptions (myIconImage.size, NO, [[UIScreen mainScreen] scale]); // for correct resolution on retina, thanks @MobileVet
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    
-//    CGContextTranslateCTM(context, 0, myIconImage.size.height);
-//    CGContextScaleCTM(context, 1.0, -1.0);
-//    
-//    CGRect rect = CGRectMake(0, 0, myIconImage.size.width, myIconImage.size.height);
-//    
-//    /// draw tint color
-//    CGContextSetBlendMode(context, kCGBlendModeNormal);
-//    [[UIColor colorWithWhite:0.200 alpha:1.000] setFill];
-//    CGContextFillRect(context, rect);
-//    
-//    // mask by alpha values of original image
-//    CGContextSetBlendMode(context, kCGBlendModeDestinationIn);
-//    CGContextDrawImage(context, rect, myIconImage.CGImage);
-//    UIImage *coloredImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    
-//    self.imageTest.image = coloredImage;
+    _networkController = [(LLAppDelegate*)[[UIApplication sharedApplication] delegate] networkController];
+    
+    _networkController.delegate = self;
+    
+    if (_networkController.tokenAuthenticated)
+    {
+        [self updateRepos];
+    }
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -102,17 +64,35 @@
     [self.menuDelegate handleMenuButtonPressed];
 }
 
+-(void)updateRepos
+{
+    NSLog(@"repos updated");
+    
+    [self.repos removeAllObjects];
+    
+    void (^repoRequestCompletionBlock)(NSMutableArray *jsonArray) = ^void(NSMutableArray *jsonArray) {
+        
+        [jsonArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            LLRepo *newRepo = [[LLRepo alloc] initWithName:obj[@"name"] withURL:obj[@"html_url"]];
+            [self.repos addObject:newRepo];
+            
+        }];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.tableView reloadData];
+        }];
+    };
+    
+    [_networkController requestReposForAuthenticatedUser:repoRequestCompletionBlock];
+}
+
 -(void)updateRepoArrayWithArray:(NSMutableArray *)array
 {
     for (NSDictionary *dict in array) {
         LLRepo *newRepo = [[LLRepo alloc] initWithName:dict[@"name"] withURL:dict[@"html_url"]];
-        [self.repoArray addObject:newRepo];
+        [self.repos addObject:newRepo];
     }
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        
-//        [self.tableView reloadData];
-//    });
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [self.tableView reloadData];
@@ -124,13 +104,13 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.repoArray.count;
+    return self.repos.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RepoCell" forIndexPath:indexPath];
-    cell.textLabel.text = [self.repoArray[indexPath.row] name];
+    cell.textLabel.text = [self.repos[indexPath.row] name];
     return cell;
 }
 
@@ -143,7 +123,7 @@
     {
         LLRepoDetailViewController *destination = segue.destinationViewController;
         
-        destination.detailItem = [self.repoArray objectAtIndex:[[_tableView indexPathForSelectedRow] row]];
+        destination.detailItem = [self.repos objectAtIndex:[[_tableView indexPathForSelectedRow] row]];
     }
 }
 

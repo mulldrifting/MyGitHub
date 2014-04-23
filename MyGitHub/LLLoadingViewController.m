@@ -45,6 +45,13 @@
     LLNetworkController *networkController = [(LLAppDelegate*)[[UIApplication sharedApplication] delegate] networkController];
     
     void (^loginCompletionBlock)(void) = ^void(void) {
+//        [UIView animateWithDuration:0.9 animations:^{
+//            self.view.alpha = 0;
+//        } completion:^(BOOL b){
+//            [self dismissViewControllerAnimated:NO completion:NO];
+//            self.view.alpha = 1;
+//        }];
+        
         [self dismissViewControllerAnimated:YES completion:nil];
     };
     

@@ -119,11 +119,19 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Repos" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zaD-Dh-MVh">
+                                <rect key="frame" x="120" y="29" width="81" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.88944913903061229" green="0.88192337416745503" blue="0.70756774235141229" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="6CE-NI-378"/>
                     <connections>
+                        <outlet property="gutterButton" destination="cIq-ip-3at" id="LUb-GE-9V4"/>
                         <outlet property="tableView" destination="4ZJ-N2-CKd" id="fHH-ho-yYM"/>
                     </connections>
                 </viewController>
@@ -183,6 +191,9 @@
                         </subviews>
                         <color key="backgroundColor" red="0.889449139" green="0.8819233742" blue="0.70756774239999998" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <connections>
+                        <outlet property="gutterButton" destination="jUS-Gt-PoG" id="sSt-FS-sx3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vrs-Yk-Iid" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -241,6 +252,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="xqr-dF-Ig4"/>
                     <connections>
+                        <outlet property="gutterButton" destination="ulT-XG-OuU" id="On3-y1-ERQ"/>
                         <outlet property="searchBar" destination="cbH-ip-m57" id="mfR-eJ-tYb"/>
                         <outlet property="searchDisplayController" destination="qNh-ZR-DGs" id="bOw-XS-6EZ"/>
                         <outlet property="tableView" destination="PUz-Q5-BOk" id="dLz-m4-gFw"/>

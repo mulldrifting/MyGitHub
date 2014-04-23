@@ -8,9 +8,11 @@
 
 #import "LLSearchViewController.h"
 #import "LLRepo.h"
+#import "LLConstants.h"
 
 @interface LLSearchViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
+@property (weak, nonatomic) IBOutlet UIButton *gutterButton;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @property (strong, nonatomic) NSMutableArray *repoArray;
@@ -29,6 +31,9 @@
     self.repoArray = [NSMutableArray new];
     
     [[UISearchBar appearance] setTintColor:[UIColor blackColor]];
+    
+    self.gutterButton.imageView.image = [LLConstants gutterButtonNormalImage];
+    [self.gutterButton setImage:[LLConstants gutterButtonHighlightedImage] forState:UIControlStateHighlighted];
     
     // Make keyboard disappear upon tapping outside text field
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]

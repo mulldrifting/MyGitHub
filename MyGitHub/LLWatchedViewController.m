@@ -7,8 +7,12 @@
 //
 
 #import "LLWatchedViewController.h"
+#import "LLConstants.h"
 
 @interface LLWatchedViewController ()
+
+@property (weak, nonatomic) IBOutlet UIButton *gutterButton;
+
 
 @end
 
@@ -26,7 +30,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    self.gutterButton.imageView.image = [LLConstants gutterButtonNormalImage];
+    [self.gutterButton setImage:[LLConstants gutterButtonHighlightedImage] forState:UIControlStateHighlighted];
 }
 
 - (void)didReceiveMemoryWarning

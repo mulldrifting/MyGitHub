@@ -8,8 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol LLNetworkControllerProtocol <NSObject>
+
+@optional
+
+-(void)updateRepos;
+
+@end
 
 @interface LLNetworkController : NSObject
+
+@property (unsafe_unretained, nonatomic) id<LLNetworkControllerProtocol> delegate;
 
 @property (nonatomic) BOOL tokenAuthenticated;
 @property (weak, nonatomic) NSURLSession *session;

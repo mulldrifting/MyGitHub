@@ -70,7 +70,7 @@
 //        NSLog(@"response: %@",response);
         
         if (error) {
-            NSLog(@"error: %@", error);
+            NSLog(@"oauth callback error: %@", error);
         }
         else {
             NSString *token = [self convertResponseDataIntoToken:data];
@@ -83,6 +83,8 @@
             
             _tokenAuthenticated = YES;
             
+            [self.delegate updateRepos];
+            
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 _loginCompletionBlock();
             }];
@@ -92,40 +94,31 @@
     [postDataTask resume];
 }
 
--(void)requestReposForAuthenticatedUser:(void(^)(NSMutableArray *repos))completionBlock
+-(void)requestReposForAuthenticatedUser:(void(^)(NSMutableArray *repos))repoRequestCompletionBlock
 {
     NSString *apiCallURLString = [GITHUB_API_URL stringByAppendingString:@"/user/repos"];
     
     NSMutableURLRequest *request = [NSMutableURLRequest new];
     [request setURL:[NSURL URLWithString:apiCallURLString]];
+    [request setValue:[NSString stringWithFormat:@"token %@", [[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"]] forHTTPHeaderField:@"Authorization"];
     [request setHTTPMethod:@"GET"];
     
     NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
+        if (error) {
+            NSLog(@"request repos error: %@", error);
+        }
         
         id jsonArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
 
         if ([jsonArray isKindOfClass:[NSMutableArray class]]) {
-            NSLog(@"%@", jsonArray);
             
-            NSMutableArray *repos = [NSMutableArray new];
+            repoRequestCompletionBlock(jsonArray);
+        }
+        
+        else {
             
-//            for (NSDictionary *dict in repos) {
-//                LLRepo *newRepo = [[LLRepo alloc] initWithName:dict[@"name"] withURL:dict[@"html_url"]];
-//                [repoArray addObject:newRepo];
-//            }
-
-            
-            [jsonArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            
-                LLRepo *newRepo = [[LLRepo alloc] initWithName:obj[@"name"] withURL:obj[@"html_url"]];
-                [repos addObject:newRepo];
-                
-            }];
-            
-            
-            
-            completionBlock(repos);
+            NSLog(@"jsonArray not NSMutableArray: %@", jsonArray);
         }
         
     }];

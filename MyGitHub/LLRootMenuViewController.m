@@ -31,14 +31,6 @@
 
 @implementation LLRootMenuViewController
 
--(void)viewDidAppear:(BOOL)animated
-{
-    if (!_networkController.tokenAuthenticated) {
-        [self performSegueWithIdentifier:@"showLoadingSegue" sender:self];
-    }
-    
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -56,6 +48,14 @@
     
     [self setupViewControllers];
     [self setupDragRecognizer];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    if (!_networkController.tokenAuthenticated) {
+        [self performSegueWithIdentifier:@"showLoadingSegue" sender:self];
+    }
     
 }
 
