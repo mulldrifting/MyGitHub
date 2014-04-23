@@ -85,9 +85,13 @@
             
             [self.delegate updateRepos];
             
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                _loginCompletionBlock();
-            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                 _loginCompletionBlock();
+            });
+            
+//            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                _loginCompletionBlock();
+//            }];
         }
     }];
     

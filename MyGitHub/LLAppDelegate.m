@@ -14,10 +14,16 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
  
-    NSOperationQueue *queue = [NSOperationQueue new];
-    [queue addOperationWithBlock:^{
+    dispatch_queue_t appQueue = dispatch_queue_create("com.mulldrifting.appQueue", NULL);
+    
+    dispatch_async(appQueue, ^{
         self.networkController = [[LLNetworkController alloc] initWithToken];
-    }];
+    });
+    
+//    NSOperationQueue *queue = [NSOperationQueue new];
+//    [queue addOperationWithBlock:^{
+//        self.networkController = [[LLNetworkController alloc] initWithToken];
+//    }];
     
     return YES;
 }
