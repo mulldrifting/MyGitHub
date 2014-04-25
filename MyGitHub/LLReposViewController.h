@@ -8,11 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "LLMenuProtocol.h"
-#import "LLRepoDetailViewController.h"
 
 @interface LLReposViewController : UIViewController
 
 @property (nonatomic, unsafe_unretained) id<LLMenuProtocol> menuDelegate;
-@property (strong, nonatomic) LLRepoDetailViewController *detailViewController;
 
 @end

@@ -10,6 +10,7 @@
 #import "LLRootMenuViewController.h"
 #import "LLReposViewController.h"
 #import "LLWatchedViewController.h"
+#import "LLUsersViewController.h"
 #import "LLSearchViewController.h"
 #import "LLMenuProtocol.h"
 
@@ -67,9 +68,12 @@
     UINavigationController *repoNav = [[UINavigationController alloc] initWithRootViewController:repoViewController];
     repoNav.navigationBarHidden = YES;
     
-    LLWatchedViewController *watchedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"watched"];
-    watchedViewController.title = @"My Watched";
-    watchedViewController.menuDelegate = self;
+//    LLWatchedViewController *watchedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"watched"];
+//    watchedViewController.title = @"My Watched";
+//    watchedViewController.menuDelegate = self;
+    
+//    LLUsersViewController *usersViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"users"];
+//    usersViewController.title = @"Users";
     
     LLSearchViewController *searchViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"search"];
     searchViewController.title = @"Search";
@@ -77,7 +81,7 @@
     UINavigationController *searchNav = [[UINavigationController alloc] initWithRootViewController:searchViewController];
     searchNav.navigationBarHidden = YES;
     
-    self.arrayOfViewControllers = [NSMutableArray arrayWithObjects:repoNav, watchedViewController, searchNav, nil];
+    self.arrayOfViewControllers = [NSMutableArray arrayWithObjects:repoNav, searchNav, nil];
     
     self.topViewController = self.arrayOfViewControllers[0];
     [self addChildViewController:self.topViewController];

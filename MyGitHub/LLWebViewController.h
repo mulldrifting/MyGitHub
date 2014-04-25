@@ -1,5 +1,5 @@
 //
-//  LLSearchDetailViewController.h
+//  LLWebViewController.h
 //  MyGitHub
 //
 //  Created by Lauren Lee on 4/21/14.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LLSearchDetailViewController : UIViewController 
+@interface LLWebViewController : UIViewController 
 
 @property (strong, nonatomic) id detailItem;
 

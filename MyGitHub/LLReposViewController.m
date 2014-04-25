@@ -7,6 +7,7 @@
 //
 
 #import "LLReposViewController.h"
+#import "LLWebViewController.h"
 #import "LLAppDelegate.h"
 #import "LLRepo.h"
 #import "LLConstants.h"
@@ -37,7 +38,6 @@
     [self.gutterButton setImage:[LLConstants gutterButtonHighlightedImage] forState:UIControlStateHighlighted];
     
     _networkController = [(LLAppDelegate*)[[UIApplication sharedApplication] delegate] networkController];
-    
     _networkController.delegate = self;
     
     if (_networkController.tokenAuthenticated)
@@ -66,7 +66,6 @@
 
 -(void)updateRepos
 {
-    NSLog(@"repos updated");
     
     [self.repos removeAllObjects];
     
@@ -84,7 +83,7 @@
         }];
     };
     
-    [_networkController requestReposForAuthenticatedUser:repoRequestCompletionBlock];
+    [_networkController requestReposForAuthenticatedUserWithCompletion:repoRequestCompletionBlock];
 }
 
 -(void)updateRepoArrayWithArray:(NSMutableArray *)array
@@ -119,9 +118,9 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"showRepoDetailSegue"])
+    if ([segue.identifier isEqualToString:@"showUserRepoSegue"])
     {
-        LLRepoDetailViewController *destination = segue.destinationViewController;
+         LLWebViewController *destination = segue.destinationViewController;
         
         destination.detailItem = [self.repos objectAtIndex:[[_tableView indexPathForSelectedRow] row]];
     }

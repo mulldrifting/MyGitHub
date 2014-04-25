@@ -8,7 +8,6 @@
 
 #import "LLNetworkController.h"
 #import "NSString+URLParse.h"
-#import "LLConstants.h"
 #import "LLRepo.h"
 
 @interface LLNetworkController()
@@ -44,7 +43,7 @@
 {
     _loginCompletionBlock = completionBlock;
     
-    NSString *urlString = [NSString stringWithFormat:GITHUB_OAUTH_URL, GITHUB_CLIENT_ID, GITHUB_CALLBACK_URI, @"user,repo"];
+    NSString *urlString = [NSString stringWithFormat:GITHUB_OAUTH_PATH, GITHUB_CLIENT_ID, GITHUB_CALLBACK_URI, @"user,repo"];
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
     
@@ -59,7 +58,7 @@
     NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     
     NSMutableURLRequest *request = [NSMutableURLRequest new];
-    [request setURL:[NSURL URLWithString:GITHUB_ACCESS_TOKEN_URL]];
+    [request setURL:[NSURL URLWithString:GITHUB_ACCESS_TOKEN_PATH]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -98,12 +97,10 @@
     [postDataTask resume];
 }
 
--(void)requestReposForAuthenticatedUser:(void(^)(NSMutableArray *repos))repoRequestCompletionBlock
+-(void)requestReposForAuthenticatedUserWithCompletion:(void(^)(NSMutableArray *repos))repoRequestCompletionBlock
 {
-    NSString *apiCallURLString = [GITHUB_API_URL stringByAppendingString:@"/user/repos"];
-    
     NSMutableURLRequest *request = [NSMutableURLRequest new];
-    [request setURL:[NSURL URLWithString:apiCallURLString]];
+    [request setURL:[NSURL URLWithString:GITHUB_USER_REPOS]];
     [request setValue:[NSString stringWithFormat:@"token %@", [[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"]] forHTTPHeaderField:@"Authorization"];
     [request setHTTPMethod:@"GET"];
     
@@ -128,6 +125,45 @@
     }];
     
     [dataTask resume];
+}
+
+-(void)searchFor:(NSInteger)query usingSearchString:(NSString *)searchString withCompletion:(void (^)(NSMutableArray *))searchCompletionBlock
+{
+    searchString = [searchString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *searchURLString;
+    
+    switch (query) {
+        case kRepoQuery:
+            searchURLString = [NSString stringWithFormat:GITHUB_SEARCH_REPOS,searchString];
+            break;
+        case kUserQuery:
+            searchURLString = [NSString stringWithFormat:GITHUB_SEARCH_USERS,searchString];
+            break;
+        default:
+            NSLog(@"Invalid Query Type");
+            return;
+    }
+    
+    [[_session dataTaskWithURL:[NSURL URLWithString:searchURLString] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+        if (error) {
+            NSLog(@"search error: %@", error);
+            return;
+        }
+        
+        id jsonDict = [NSJSONSerialization JSONObjectWithData:data
+                                                      options:NSJSONReadingMutableContainers
+                                                        error:nil];
+        
+        if ([jsonDict isKindOfClass:[NSMutableDictionary class]]) {
+            searchCompletionBlock(jsonDict[@"items"]);
+        }
+        else {
+            
+            NSLog(@"jsonDict not NSMutableDictionary: %@", jsonDict);
+        }
+        
+    }] resume];
 }
 
 -(NSString *)getCodeFromCallbackURL:(NSURL*)callbackURL

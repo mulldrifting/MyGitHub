@@ -7,8 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE4BCCB31909780300901EE1 /* LLUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE4BCCB21909780300901EE1 /* LLUsersViewController.m */; };
+		FE4BCCB619098B9C00901EE1 /* LLUser.m in Sources */ = {isa = PBXBuildFile; fileRef = FE4BCCB519098B9C00901EE1 /* LLUser.m */; };
+		FE4BCCB9190992D400901EE1 /* LLUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FE4BCCB8190992D400901EE1 /* LLUserCell.m */; };
+		FE4BCCC01909B8B400901EE1 /* LLRepoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FE4BCCBF1909B8B400901EE1 /* LLRepoCell.m */; };
+		FE613E2A1909D2C200FA45CA /* LLSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE613E291909D2C200FA45CA /* LLSearchUsersViewController.m */; };
+		FE613E2D1909D2CC00FA45CA /* LLSearchReposViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE613E2C1909D2CC00FA45CA /* LLSearchReposViewController.m */; };
+		FE613E301909F58A00FA45CA /* LLRootMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE613E2F1909F58A00FA45CA /* LLRootMenuViewController.m */; };
 		FE958E061906DFDA00768908 /* LLNetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE958E051906DFDA00768908 /* LLNetworkController.m */; };
-		FE958E09190707EF00768908 /* LLRepoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE958E08190707EF00768908 /* LLRepoDetailViewController.m */; };
 		FE958E0D190729D000768908 /* LLConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FE958E0C190729D000768908 /* LLConstants.m */; };
 		FEF3424219083DCA003AC14F /* LLLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEF3424119083DCA003AC14F /* LLLoadingViewController.m */; };
 		FEF3424519085F58003AC14F /* NSString+URLParse.m in Sources */ = {isa = PBXBuildFile; fileRef = FEF3424419085F58003AC14F /* NSString+URLParse.m */; };
@@ -19,7 +25,6 @@
 		FEFC57B61905AB7600F354BB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57B51905AB7600F354BB /* main.m */; };
 		FEFC57BA1905AB7600F354BB /* LLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57B91905AB7600F354BB /* LLAppDelegate.m */; };
 		FEFC57BD1905AB7600F354BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FEFC57BB1905AB7600F354BB /* Main.storyboard */; };
-		FEFC57C01905AB7600F354BB /* LLRootMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57BF1905AB7600F354BB /* LLRootMenuViewController.m */; };
 		FEFC57C21905AB7600F354BB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEFC57C11905AB7600F354BB /* Images.xcassets */; };
 		FEFC57C91905AB7600F354BB /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEFC57C81905AB7600F354BB /* XCTest.framework */; };
 		FEFC57CA1905AB7600F354BB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEFC57A91905AB7600F354BB /* Foundation.framework */; };
@@ -29,7 +34,7 @@
 		FEFC57E01905B11500F354BB /* LLReposViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57DF1905B11500F354BB /* LLReposViewController.m */; };
 		FEFC57E31905B12700F354BB /* LLWatchedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57E21905B12700F354BB /* LLWatchedViewController.m */; };
 		FEFC57E61905B13100F354BB /* LLSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57E51905B13100F354BB /* LLSearchViewController.m */; };
-		FEFC57EB1905C74E00F354BB /* LLSearchDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57EA1905C74E00F354BB /* LLSearchDetailViewController.m */; };
+		FEFC57EB1905C74E00F354BB /* LLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57EA1905C74E00F354BB /* LLWebViewController.m */; };
 		FEFC57EF1905CB0C00F354BB /* LLRepo.m in Sources */ = {isa = PBXBuildFile; fileRef = FEFC57EE1905CB0C00F354BB /* LLRepo.m */; };
 /* End PBXBuildFile section */
 
@@ -44,10 +49,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FE4BCCB11909780300901EE1 /* LLUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLUsersViewController.h; sourceTree = "<group>"; };
+		FE4BCCB21909780300901EE1 /* LLUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLUsersViewController.m; sourceTree = "<group>"; };
+		FE4BCCB419098B9C00901EE1 /* LLUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLUser.h; sourceTree = "<group>"; };
+		FE4BCCB519098B9C00901EE1 /* LLUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLUser.m; sourceTree = "<group>"; };
+		FE4BCCB7190992D400901EE1 /* LLUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLUserCell.h; sourceTree = "<group>"; };
+		FE4BCCB8190992D400901EE1 /* LLUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLUserCell.m; sourceTree = "<group>"; };
+		FE4BCCBE1909B8B400901EE1 /* LLRepoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLRepoCell.h; sourceTree = "<group>"; };
+		FE4BCCBF1909B8B400901EE1 /* LLRepoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLRepoCell.m; sourceTree = "<group>"; };
+		FE613E281909D2C200FA45CA /* LLSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSearchUsersViewController.h; sourceTree = "<group>"; };
+		FE613E291909D2C200FA45CA /* LLSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSearchUsersViewController.m; sourceTree = "<group>"; };
+		FE613E2B1909D2CC00FA45CA /* LLSearchReposViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSearchReposViewController.h; sourceTree = "<group>"; };
+		FE613E2C1909D2CC00FA45CA /* LLSearchReposViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSearchReposViewController.m; sourceTree = "<group>"; };
+		FE613E2E1909F58A00FA45CA /* LLRootMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLRootMenuViewController.h; sourceTree = "<group>"; };
+		FE613E2F1909F58A00FA45CA /* LLRootMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLRootMenuViewController.m; sourceTree = "<group>"; };
 		FE958E041906DFDA00768908 /* LLNetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLNetworkController.h; sourceTree = "<group>"; };
 		FE958E051906DFDA00768908 /* LLNetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLNetworkController.m; sourceTree = "<group>"; };
-		FE958E07190707EF00768908 /* LLRepoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLRepoDetailViewController.h; sourceTree = "<group>"; };
-		FE958E08190707EF00768908 /* LLRepoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLRepoDetailViewController.m; sourceTree = "<group>"; };
 		FE958E0B190729D000768908 /* LLConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLConstants.h; sourceTree = "<group>"; };
 		FE958E0C190729D000768908 /* LLConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLConstants.m; sourceTree = "<group>"; };
 		FEF3424019083DCA003AC14F /* LLLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLLoadingViewController.h; sourceTree = "<group>"; };
@@ -65,8 +82,6 @@
 		FEFC57B81905AB7600F354BB /* LLAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLAppDelegate.h; sourceTree = "<group>"; };
 		FEFC57B91905AB7600F354BB /* LLAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLAppDelegate.m; sourceTree = "<group>"; };
 		FEFC57BC1905AB7600F354BB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		FEFC57BE1905AB7600F354BB /* LLRootMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLRootMenuViewController.h; sourceTree = "<group>"; };
-		FEFC57BF1905AB7600F354BB /* LLRootMenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLRootMenuViewController.m; sourceTree = "<group>"; };
 		FEFC57C11905AB7600F354BB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		FEFC57C71905AB7600F354BB /* MyGitHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyGitHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEFC57C81905AB7600F354BB /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -80,8 +95,8 @@
 		FEFC57E41905B13100F354BB /* LLSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSearchViewController.h; sourceTree = "<group>"; };
 		FEFC57E51905B13100F354BB /* LLSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSearchViewController.m; sourceTree = "<group>"; };
 		FEFC57E81905B44200F354BB /* LLMenuProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLMenuProtocol.h; sourceTree = "<group>"; };
-		FEFC57E91905C74E00F354BB /* LLSearchDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSearchDetailViewController.h; sourceTree = "<group>"; };
-		FEFC57EA1905C74E00F354BB /* LLSearchDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSearchDetailViewController.m; sourceTree = "<group>"; };
+		FEFC57E91905C74E00F354BB /* LLWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLWebViewController.h; sourceTree = "<group>"; };
+		FEFC57EA1905C74E00F354BB /* LLWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLWebViewController.m; sourceTree = "<group>"; };
 		FEFC57ED1905CB0C00F354BB /* LLRepo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLRepo.h; sourceTree = "<group>"; };
 		FEFC57EE1905CB0C00F354BB /* LLRepo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLRepo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,6 +125,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FE4BCCBB1909B47800901EE1 /* Repos */ = {
+			isa = PBXGroup;
+			children = (
+				FEFC57DE1905B11500F354BB /* LLReposViewController.h */,
+				FEFC57DF1905B11500F354BB /* LLReposViewController.m */,
+			);
+			name = Repos;
+			sourceTree = "<group>";
+		};
+		FE4BCCBC1909B48F00901EE1 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				FE4BCCB7190992D400901EE1 /* LLUserCell.h */,
+				FE4BCCB8190992D400901EE1 /* LLUserCell.m */,
+				FE4BCCBE1909B8B400901EE1 /* LLRepoCell.h */,
+				FE4BCCBF1909B8B400901EE1 /* LLRepoCell.m */,
+				FEFC57E41905B13100F354BB /* LLSearchViewController.h */,
+				FEFC57E51905B13100F354BB /* LLSearchViewController.m */,
+				FE613E281909D2C200FA45CA /* LLSearchUsersViewController.h */,
+				FE613E291909D2C200FA45CA /* LLSearchUsersViewController.m */,
+				FE613E2B1909D2CC00FA45CA /* LLSearchReposViewController.h */,
+				FE613E2C1909D2CC00FA45CA /* LLSearchReposViewController.m */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		FE4BCCBD1909B4A000901EE1 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				FEF3424019083DCA003AC14F /* LLLoadingViewController.h */,
+				FEF3424119083DCA003AC14F /* LLLoadingViewController.m */,
+				FE613E2E1909F58A00FA45CA /* LLRootMenuViewController.h */,
+				FE613E2F1909F58A00FA45CA /* LLRootMenuViewController.m */,
+			);
+			name = Root;
+			sourceTree = "<group>";
+		};
 		FE958E0A190729BE00768908 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,20 +253,15 @@
 			isa = PBXGroup;
 			children = (
 				FEFC57E81905B44200F354BB /* LLMenuProtocol.h */,
-				FEF3424019083DCA003AC14F /* LLLoadingViewController.h */,
-				FEF3424119083DCA003AC14F /* LLLoadingViewController.m */,
-				FEFC57BE1905AB7600F354BB /* LLRootMenuViewController.h */,
-				FEFC57BF1905AB7600F354BB /* LLRootMenuViewController.m */,
-				FEFC57DE1905B11500F354BB /* LLReposViewController.h */,
-				FEFC57DF1905B11500F354BB /* LLReposViewController.m */,
-				FE958E07190707EF00768908 /* LLRepoDetailViewController.h */,
-				FE958E08190707EF00768908 /* LLRepoDetailViewController.m */,
+				FEFC57E91905C74E00F354BB /* LLWebViewController.h */,
+				FEFC57EA1905C74E00F354BB /* LLWebViewController.m */,
+				FE4BCCBD1909B4A000901EE1 /* Root */,
+				FE4BCCBB1909B47800901EE1 /* Repos */,
+				FE4BCCBC1909B48F00901EE1 /* Search */,
+				FE4BCCB11909780300901EE1 /* LLUsersViewController.h */,
+				FE4BCCB21909780300901EE1 /* LLUsersViewController.m */,
 				FEFC57E11905B12700F354BB /* LLWatchedViewController.h */,
 				FEFC57E21905B12700F354BB /* LLWatchedViewController.m */,
-				FEFC57E41905B13100F354BB /* LLSearchViewController.h */,
-				FEFC57E51905B13100F354BB /* LLSearchViewController.m */,
-				FEFC57E91905C74E00F354BB /* LLSearchDetailViewController.h */,
-				FEFC57EA1905C74E00F354BB /* LLSearchDetailViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -224,6 +271,8 @@
 			children = (
 				FEFC57ED1905CB0C00F354BB /* LLRepo.h */,
 				FEFC57EE1905CB0C00F354BB /* LLRepo.m */,
+				FE4BCCB419098B9C00901EE1 /* LLUser.h */,
+				FE4BCCB519098B9C00901EE1 /* LLUser.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -327,18 +376,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEFC57E61905B13100F354BB /* LLSearchViewController.m in Sources */,
-				FE958E09190707EF00768908 /* LLRepoDetailViewController.m in Sources */,
+				FE4BCCB31909780300901EE1 /* LLUsersViewController.m in Sources */,
 				FEFC57EF1905CB0C00F354BB /* LLRepo.m in Sources */,
+				FE4BCCB619098B9C00901EE1 /* LLUser.m in Sources */,
 				FEFC57BA1905AB7600F354BB /* LLAppDelegate.m in Sources */,
 				FEF3424519085F58003AC14F /* NSString+URLParse.m in Sources */,
 				FE958E0D190729D000768908 /* LLConstants.m in Sources */,
+				FE613E2D1909D2CC00FA45CA /* LLSearchReposViewController.m in Sources */,
 				FE958E061906DFDA00768908 /* LLNetworkController.m in Sources */,
+				FE613E2A1909D2C200FA45CA /* LLSearchUsersViewController.m in Sources */,
 				FEFC57E31905B12700F354BB /* LLWatchedViewController.m in Sources */,
 				FEFC57B61905AB7600F354BB /* main.m in Sources */,
-				FEFC57EB1905C74E00F354BB /* LLSearchDetailViewController.m in Sources */,
+				FEFC57EB1905C74E00F354BB /* LLWebViewController.m in Sources */,
 				FEF3424219083DCA003AC14F /* LLLoadingViewController.m in Sources */,
+				FE613E301909F58A00FA45CA /* LLRootMenuViewController.m in Sources */,
 				FEFC57E01905B11500F354BB /* LLReposViewController.m in Sources */,
-				FEFC57C01905AB7600F354BB /* LLRootMenuViewController.m in Sources */,
+				FE4BCCB9190992D400901EE1 /* LLUserCell.m in Sources */,
+				FE4BCCC01909B8B400901EE1 /* LLRepoCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

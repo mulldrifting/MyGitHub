@@ -8,13 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "LLMenuProtocol.h"
-#import "LLSearchDetailViewController.h"
 
 @interface LLSearchViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-
 @property (nonatomic, unsafe_unretained) id<LLMenuProtocol> menuDelegate;
-@property (strong, nonatomic) LLSearchDetailViewController *detailViewController;
+
 
 @end

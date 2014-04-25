@@ -1,14 +1,14 @@
 //
-//  LLSearchDetailViewController.m
+//  LLWebViewController.m
 //  MyGitHub
 //
 //  Created by Lauren Lee on 4/21/14.
 //  Copyright (c) 2014 Lauren Lee. All rights reserved.
 //
 
-#import "LLSearchDetailViewController.h"
+#import "LLWebViewController.h"
 
-@interface LLSearchDetailViewController ()
+@interface LLWebViewController () 
 
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation LLSearchDetailViewController
+@implementation LLWebViewController
 
 #pragma mark - Managing the detail item
 

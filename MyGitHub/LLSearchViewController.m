@@ -7,15 +7,32 @@
 //
 
 #import "LLSearchViewController.h"
+#import "LLWebViewController.h"
+#import "LLSearchUsersViewController.h"
+#import "LLSearchReposViewController.h"
+#import "LLAppDelegate.h"
+#import "LLUserCell.h"
+#import "LLRepoCell.h"
 #import "LLRepo.h"
+#import "LLUser.h"
 #import "LLConstants.h"
 
-@interface LLSearchViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface LLSearchViewController () <UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *gutterButton;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
 
-@property (strong, nonatomic) NSMutableArray *repoArray;
+
+@property (strong, nonatomic) NSMutableArray *arrayOfViewControllers;
+@property (strong, nonatomic) UIViewController *topViewController;
+
+@property (weak, nonatomic) LLNetworkController *networkController;
+@property (strong, nonatomic) NSMutableArray *userSearchResults;
+@property (strong, nonatomic) NSMutableArray *repoSearchResults;
+@property (nonatomic) BOOL showingRepos;
+@property (strong, nonatomic) UITapGestureRecognizer *tapOutside;
 
 @end
 
@@ -25,68 +42,65 @@
 {
     [super viewDidLoad];
     
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    _networkController = [(LLAppDelegate*)[[UIApplication sharedApplication] delegate] networkController];
     
-    self.repoArray = [NSMutableArray new];
+    [self setupViewControllers];
     
+    self.repoSearchResults = [NSMutableArray new];
+    self.userSearchResults = [NSMutableArray new];
+    
+    // Setup segmented control
+    self.segmentedControl.selectedSegmentIndex = 0;
+    self.showingRepos = YES;
+    
+    // Sets text cursor to black
     [[UISearchBar appearance] setTintColor:[UIColor blackColor]];
     
     self.gutterButton.imageView.image = [LLConstants gutterButtonNormalImage];
     [self.gutterButton setImage:[LLConstants gutterButtonHighlightedImage] forState:UIControlStateHighlighted];
     
-    // Make keyboard disappear upon tapping outside text field
-    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
-                                          initWithTarget:self
-                                          action:@selector(dismissKeyboard)];
-    tapOutside.cancelsTouchesInView = NO;
-    [self.view addGestureRecognizer:tapOutside];
+    // Allocate gesture recognizer to make keyboard disappear upon tapping outside text field
+    self.tapOutside = [UITapGestureRecognizer alloc];
+    self.tapOutside.cancelsTouchesInView = NO;
     
         
 }
 
 - (IBAction)menuButtonPressed:(id)sender {
-    [self.searchBar resignFirstResponder];
+    [self dismissKeyboard];
     [self.menuDelegate handleMenuButtonPressed];
 }
 
-- (void)reposForSearchString:(NSString *)searchString
+- (void)setupViewControllers
 {
-    searchString = [searchString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    LLSearchReposViewController *searchReposViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"searchRepos"];
+    LLSearchUsersViewController *searchUsersViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"searchUsers"];
     
-    NSURL *jsonURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.github.com/search/repositories?q=%@", searchString]];
+    self.arrayOfViewControllers = [NSMutableArray arrayWithObjects:searchReposViewController, searchUsersViewController, nil];
     
-    NSData *jsonData = [NSData dataWithContentsOfURL:jsonURL];
-    
-    id jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                  options:NSJSONReadingMutableContainers
-                                                    error:nil];
-    
-    for (NSDictionary *repo in jsonDict[@"items"]) {
-        LLRepo *newRepo = [[LLRepo alloc] initWithName:repo[@"name"] withURL:repo[@"html_url"]];
-        [self.repoArray addObject:newRepo];
-    }
-    
-    [self.tableView reloadData];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-        return [self.repoArray count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell" forIndexPath:indexPath];
-    cell.textLabel.text = [self.repoArray[indexPath.row] name];
-    return cell;
+    self.topViewController = self.arrayOfViewControllers[kRepoView];
+    [self addChildViewController:self.topViewController];
+    [self.containerView addSubview:self.topViewController.view];
+    [self.topViewController didMoveToParentViewController:self];
 }
 
 #pragma mark - Search Bar Methods
 
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    self.tapOutside = [self.tapOutside initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:self.tapOutside];
+}
+
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [self reposForSearchString:searchBar.text];
+    if (_showingRepos) {
+        [(LLSearchReposViewController*)self.topViewController performSearchWithString:searchBar.text];
+    }
+    else {
+        [(LLSearchUsersViewController*)self.topViewController performSearchWithString:searchBar.text];
+    }
+    
     [self dismissKeyboard];
 }
 
@@ -98,20 +112,39 @@
 -(void)dismissKeyboard
 {
     [self.view endEditing:YES];
+    [self.view removeGestureRecognizer:self.tapOutside];
 }
 
-#pragma mark - Navigation
+#pragma mark - Segmented Control Methods
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+-(IBAction)switchLayout:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"showDetailViewSegue"])
-    {
-        LLSearchDetailViewController *destination = segue.destinationViewController;
+    int index = (_showingRepos) ? kUserView : kRepoView;
+    self.showingRepos = !self.showingRepos;
+    
+    [UIView animateWithDuration:.2 animations:^{
         
-        destination.detailItem = [self.repoArray objectAtIndex:[[_tableView indexPathForSelectedRow] row]];
-    }
+        self.topViewController.view.frame = self.containerView.bounds;
+        
+    } completion:^(BOOL finished) {
+        
+        CGRect offScreen = self.topViewController.view.frame;
+        
+        [self.topViewController.view removeFromSuperview];
+        [self.topViewController removeFromParentViewController];
+        
+        self.topViewController = self.arrayOfViewControllers[index];
+        
+        self.topViewController.view.frame = offScreen;
+        
+        [self addChildViewController:self.topViewController];
+        [self.containerView addSubview:self.topViewController.view];
+        [self.topViewController didMoveToParentViewController:self];
+        
+    }];
+    
 }
+
 
 
 @end

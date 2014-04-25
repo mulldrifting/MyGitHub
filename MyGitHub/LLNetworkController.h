@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LLConstants.h"
 
 @protocol LLNetworkControllerProtocol <NSObject>
 
@@ -26,6 +27,8 @@
 -(id)initWithToken;
 -(void)requestOAuthAccessWithCompletion:(void(^)(void))completionBlock;
 -(void)handleOAuthCallbackWithURL:(NSURL*)url;
--(void)requestReposForAuthenticatedUser:(void(^)(NSMutableArray *repos))completionBlock;
+-(void)requestReposForAuthenticatedUserWithCompletion:(void(^)(NSMutableArray *repos))completionBlock;
+-(void)searchFor:(NSInteger)query usingSearchString:(NSString*)searchString withCompletion:(void(^)(NSMutableArray* results))searchCompletionBlock;
+
 
 @end
